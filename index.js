@@ -30,6 +30,16 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use("/api", router);
 
+io.on("connection", (socket) => {
+  console.log(socket.id);
+  socket.on("message", (message, name) => {
+    socket.broadcast.emit("message", {
+      body: message,
+      from: name,
+    });
+  });
+});
+
 //Conexion a MongoDb
 mongoose
   .connect(url)
