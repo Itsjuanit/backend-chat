@@ -15,10 +15,12 @@ dotenv.config();
 mongoose.Promise = global.Promise;
 
 // Obtén la URL de MongoDB desde las variables de entorno
-const url = process.env.MONGODB_URL; // Cambia 'tu-base-de-datos' por el nombre de tu base de datos
+const url =
+  process.env.MONGODB_URL ||
+  "mongodb+srv://itsjuanit:LAHhTWEi6LP8gJTY@cluster0.4pjbylk.mongodb.net/?retryWrites=true&w=majority"; // Cambia 'tu-base-de-datos' por el nombre de tu base de datos
 
 // Puerto del servidor
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 4000;
 
 // Crear la aplicación Express
 const app = express();
