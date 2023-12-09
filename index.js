@@ -18,7 +18,7 @@ const PORT = 4000;
 //SERVIDOR CON MODULO DE HTTP
 const server = http.createServer(app);
 const io = new SocketServer(server, {
-  core: {
+  cors: {
     origin: "*",
   },
 });
