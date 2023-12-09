@@ -1,0 +1,8 @@
+# .gitignore
+.env
+node_modules/
+.vscode/
+*.log
+*.tmp
+/build/
+/dist/
