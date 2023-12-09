@@ -6,30 +6,41 @@ import cors from "cors";
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import router from "./routes/message.js";
+import dotenv from "dotenv";
 
-//config MONGOOSE
-let url =
-  "mongodb+srv://itsjuanit:LAHhTWEi6LP8gJTY@cluster0.4pjbylk.mongodb.net/?retryWrites=true&w=majority";
+// Cargar las variables de entorno desde el archivo .env
+dotenv.config();
+
+// Configuración de Mongoose
 mongoose.Promise = global.Promise;
 
-const app = express();
-const PORT = 4000;
+// Obtén la URL de MongoDB desde las variables de entorno
+const url = process.env.MONGODB_URL; // Cambia 'tu-base-de-datos' por el nombre de tu base de datos
 
-//SERVIDOR CON MODULO DE HTTP
+// Puerto del servidor
+const PORT = process.env.PORT;
+
+// Crear la aplicación Express
+const app = express();
+
+// Crear el servidor HTTP con Express
 const server = http.createServer(app);
+
+// Configuración del Socket.IO
 const io = new SocketServer(server, {
   cors: {
     origin: "*",
   },
 });
 
-//Middlewares
+// Middlewares
 app.use(cors());
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use("/api", router);
 
+// Manejar conexiones con Socket.IO
 io.on("connection", (socket) => {
   console.log(socket.id);
   socket.on("message", (message, name) => {
@@ -40,13 +51,13 @@ io.on("connection", (socket) => {
   });
 });
 
-//Conexion a MongoDb
+// Conexión a MongoDB
 mongoose
   .connect(url)
   .then(() => {
-    console.log("CONEXION EXITOSA");
+    console.log("CONEXIÓN EXITOSA");
     server.listen(PORT, () => {
-      console.log("SERVIDOR EJECUTANDOSE EN HTTP LOCALHOST", PORT);
+      console.log("SERVIDOR EJECUTÁNDOSE EN HTTP LOCALHOST", PORT);
     });
   })
   .catch((error) => {
